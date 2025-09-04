@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>{{ camp.name }}</h3>
+<p class="text-muted">Subject: {{ camp.subject }} | Created: {{ camp.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+<table class="table table-bordered table-sm">
+  <thead><tr><th>ID</th><th>Recipient</th><th>Status</th><th>Error</th><th>Opened</th><th>Clicks</th></tr></thead>
+  <tbody>
+  {% for e in logs %}
+    <tr class="{% if e.status=='failed' %}table-danger{% elif e.opened_at %}table-success{% endif %}">
+      <td>{{ e.id }}</td>
+      <td>{{ e.recipient }}</td>
+      <td>{{ e.status }}</td>
+      <td class="small">{{ e.error or '' }}</td>
+      <td>{{ e.opened_at.strftime('%Y-%m-%d %H:%M') if e.opened_at else '' }}</td>
+      <td>{{ e.clicks }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a class="btn btn-outline-secondary" href="{{ url_for('campaign_list') }}">Back</a>
+{% endblock %}

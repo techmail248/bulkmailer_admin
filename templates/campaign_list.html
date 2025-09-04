@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Campaigns</h3>
+<table class="table table-striped">
+  <thead><tr><th>Name</th><th>Subject</th><th>Created</th><th>Total</th><th>Sent</th><th>Failed</th><th>Opened</th><th>Clicks</th><th></th></tr></thead>
+  <tbody>
+  {% for c in camps %}
+    <tr>
+      <td>{{ c.name }}</td>
+      <td>{{ c.subject }}</td>
+      <td>{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>{{ stats[c.id].total }}</td>
+      <td>{{ stats[c.id].sent }}</td>
+      <td>{{ stats[c.id].failed }}</td>
+      <td>{{ stats[c.id].opened }}</td>
+      <td>{{ stats[c.id].clicks }}</td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('campaign_detail', cid=c.id) }}">Open</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

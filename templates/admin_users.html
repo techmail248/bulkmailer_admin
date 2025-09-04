@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Admin: Manage Users</h3>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Create New User</h5>
+    <form method="POST">
+      <input type="hidden" name="action" value="create" />
+      <div class="row g-2">
+        <div class="col-md-4"><input class="form-control" type="email" name="email" placeholder="Email" required></div>
+        <div class="col-md-4"><input class="form-control" type="text" name="password" placeholder="Temporary Password" required></div>
+        <div class="col-md-2 form-check mt-2">
+          <input class="form-check-input" type="checkbox" id="is_admin" name="is_admin">
+          <label class="form-check-label" for="is_admin">Admin</label>
+        </div>
+        <div class="col-md-2"><button class="btn btn-success w-100">Create</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">All Users</h5>
+    <table class="table table-striped">
+      <thead><tr><th>ID</th><th>Email</th><th>Admin</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ 'Yes' if u.is_admin else 'No' }}</td>
+          <td>{{ u.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>
+            <form method="POST" class="d-inline">
+              <input type="hidden" name="action" value="reset">
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+              <input class="form-control d-inline w-auto" type="text" name="password" placeholder="New Password" required>
+              <button class="btn btn-outline-primary btn-sm">Reset</button>
+            </form>
+            {% if current_user.id != u.id %}
+            <form method="POST" class="d-inline ms-2" onsubmit="return confirm('Delete user {{ u.email }}?')">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+              <button class="btn btn-outline-danger btn-sm">Delete</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
